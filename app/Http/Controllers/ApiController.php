@@ -72,8 +72,8 @@ class ApiController extends Controller
     {
         //crate new client
         $client = new Client();
-        $client->name = $request->name();
-        $client->email = $request->email();
+        $client->name = $request->name;
+        $client->email = $request->email;
         $client->save();
 
         return response()->json(
@@ -81,6 +81,49 @@ class ApiController extends Controller
                 'status' => 'ok',
                 'message' => 'success',
                 'data' => $client
+            ],
+            200
+        );
+    }
+
+    public function updateClient(Request $request)
+    {
+        //check if ID is isset
+        if(!$request->id){
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Client ID is required'
+                ]
+            );
+        }
+
+        //update client
+        $client = Client::find($request->id);
+        $client->name = $request->name;
+        $client->email = $request->email;
+        $client->save();
+
+        return response()->json(
+            [
+                'status' => 'ok',
+                'message' => 'success',
+                'data' => $client
+            ],
+            200
+        );
+    }
+
+    public function deleteClient($id)
+    {
+        //get client by ID widhout validation
+        $client = Client::find($id);
+        $client->delete();
+
+        return response()->json(
+            [
+                'status' => 'ok',
+                'message' => 'success'
             ],
             200
         );

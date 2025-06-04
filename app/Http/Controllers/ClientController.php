@@ -33,7 +33,7 @@ class ClientController extends Controller
         return response()->json([
             'message' => 'client created successfully',
             'data' => $client
-        ],200);
+        ], 200);
     }
 
     /**
@@ -44,9 +44,9 @@ class ClientController extends Controller
         // show client
         $client = Client::find($id);
 
-        if($client){
+        if ($client) {
             return response()->json([$client], 200);
-        }else{
+        } else {
             return response()->json(['message' => 'Client no found'], 404);
         }
     }
@@ -59,7 +59,7 @@ class ClientController extends Controller
         // validate
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:clients,email,'.$id, //nao aceita emails repitidos, mas ignora caso seja igual ao proprio cliente que esta alterando(se ele alterar apenas o nome, o email ficara igual e entraria na validação do unique, mas caso o id seja igual ao do cliente, ou seja, se o proprio cliente estiver alterando os dados, a validação ignora o unique)
+            'email' => 'required|email|unique:clients,email,' . $id, //nao aceita emails repitidos, mas ignora caso seja igual ao proprio cliente que esta alterando(se ele alterar apenas o nome, o email ficara igual e entraria na validação do unique, mas caso o id seja igual ao do cliente, ou seja, se o proprio cliente estiver alterando os dados, a validação ignora o unique)
             'phone' => 'required'
         ]);
 
@@ -76,18 +76,16 @@ class ClientController extends Controller
         // ]);
 
         $client = Client::find($id);
-        if($client){
-            
+        if ($client) {
+
             $client->update($request->all());
             return response()->json([
                 'message' => 'Client Updated',
                 'data' => $client
-            ],200);
-
-        }else{
-            return response()->json(['message' => 'Client not found'],404);
+            ], 200);
+        } else {
+            return response()->json(['message' => 'Client not found'], 404);
         }
-
     }
 
     /**
@@ -95,6 +93,12 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $client = Client::find($id);
+        if ($client) {
+            $client->delete();
+            return response()->json(['message' => 'Client Deleted']);
+        } else {
+            return response()->json(['message' => 'Client Not Found'], 404);
+        }
     }
 }

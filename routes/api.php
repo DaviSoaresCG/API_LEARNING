@@ -1,14 +1,16 @@
 <?php
 
-use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/status', [ApiController::class, 'status']);
-Route::get('/clients', [ApiController::class, 'clients']);
-Route::get('/client-by-id/{id}', [ApiController::class, 'clientById']);
-Route::post('/client', [ApiController::class, 'client']);
-    
-Route::post('/add-client', [ApiController::class, 'addClient']);
+Route::get('/status', function(){
+    return response()->json(
+        [
+            'status' => 'ok',
+            "message" => "API is running"
+        ],
+        200
+    );
+});
 
-Route::put('/update-client', [ApiController::class, 'updateClient']);
-Route::delete('/delete-client/{id}', [ApiController::class, 'deleteClient']);
+Route::apiResource('clients', ClientController::class);

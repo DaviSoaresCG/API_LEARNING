@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Services\ApiResponse;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -12,7 +13,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return response()->json(Client::all(), 200);
+        return ApiResponse::success(Client::all());
     }
 
     /**
@@ -30,10 +31,7 @@ class ClientController extends Controller
         // add a new client 
         $client = Client::create($request->all());
 
-        return response()->json([
-            'message' => 'client created successfully',
-            'data' => $client
-        ], 200);
+        return ApiResponse::success($client);
     }
 
     /**
@@ -45,9 +43,9 @@ class ClientController extends Controller
         $client = Client::find($id);
 
         if ($client) {
-            return response()->json([$client], 200);
+            return ApiResponse::success($client);
         } else {
-            return response()->json(['message' => 'Client no found'], 404);
+            return ApiResponse::error('Client Not Found');
         }
     }
 
@@ -79,12 +77,9 @@ class ClientController extends Controller
         if ($client) {
 
             $client->update($request->all());
-            return response()->json([
-                'message' => 'Client Updated',
-                'data' => $client
-            ], 200);
+            return ApiResponse::success($client);
         } else {
-            return response()->json(['message' => 'Client not found'], 404);
+            return ApiResponse::error("Client Not Found");
         }
     }
 
@@ -96,9 +91,9 @@ class ClientController extends Controller
         $client = Client::find($id);
         if ($client) {
             $client->delete();
-            return response()->json(['message' => 'Client Deleted']);
+            return ApiResponse::success('Client deleted!');
         } else {
-            return response()->json(['message' => 'Client Not Found'], 404);
+            return ApiResponse::error('Client NOT FOUND');
         }
     }
 }

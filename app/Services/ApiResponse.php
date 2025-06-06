@@ -11,12 +11,12 @@ class ApiResponse{
         ],200);
     }
 
-    public static function error($message)
+    public static function error($message, $code = 500)
     {
         return response()->json([
-            'status_code' => 500,
+            'status_code' => $code,
             'message' => $message
-        ],500);
+        ],$code);
     }
 
     public static function unauthorized()

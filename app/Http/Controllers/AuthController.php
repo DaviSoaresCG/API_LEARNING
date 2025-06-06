@@ -31,7 +31,10 @@ class AuthController extends Controller
         }
 
         $user = auth()->user();
-        $token = $user->createToken($user->name)->plainTextToken;
+
+        // $token = $user->createToken($user->name)->plainTextToken;
+        // outra forma de fazer o token, com expiração
+        $token = $user->createToken($user->name, ["client:all,client:detail"], now()->addHour())->plainTextToken;
 
         // return token
         return ApiResponse::success([
@@ -39,5 +42,11 @@ class AuthController extends Controller
             'email' => $user->email,
             'token' => $token
         ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return ApiResponse::success('Logout success');
     }
 }

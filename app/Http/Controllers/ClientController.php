@@ -13,6 +13,9 @@ class ClientController extends Controller
      */
     public function index()
     {
+        if(!auth()->user()->tokenCan("client:all")){
+            return ApiResponse::error('You dont have permission to access all clients', 401);
+        }
         return ApiResponse::success(Client::all());
     }
 
@@ -21,6 +24,10 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
+
+        if(!auth()->user()->tokenCan("client:create")){
+            return ApiResponse::error("You dont have permisson to create clients", 401);
+        }
         //validate the resquest
         $request->validate([
             'name' => 'required',
@@ -39,6 +46,9 @@ class ClientController extends Controller
      */
     public function show(string $id)
     {
+        if(!auth()->user()->tokenCan("client:detail")){
+            return ApiResponse::error("You dont have permission to access clients details", 401);
+        }
         // show client
         $client = Client::find($id);
 
@@ -54,6 +64,9 @@ class ClientController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if(!auth()->user()->tokenCan("client:update")){
+            return ApiResponse::error("You dont have permission to update client", 401);
+        }
         // validate
         $request->validate([
             'name' => 'required',
@@ -88,6 +101,9 @@ class ClientController extends Controller
      */
     public function destroy(string $id)
     {
+        if(!auth()->user()->tokenCan("client:delete")){
+            return ApiResponse::error("You dont have permission to delete clients", 401);
+        }
         $client = Client::find($id);
         if ($client) {
             $client->delete();
